@@ -25,7 +25,7 @@ function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
     (state) => state.auth
   );
-  const dispatch = useDispatch(checkAuth());
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(checkAuth());
@@ -87,8 +87,7 @@ function App() {
           <Route path="listing" element={<ShoppingListing />} />
           <Route path="checkout" element={<ShoppingCheckout />} />
           <Route path="account" element={<ShoppingAccount />} />
-                    <Route path="payment-success" element={<PaymentSuccessPage />} />
-          <Route path="search" element={<SearchProducts />} />
+                    <Route path="search" element={<SearchProducts />} />
           <Route path="order-confirm" element={<OrderConfirmPage />} />
         </Route>
         <Route path="/unauth-page" element={<UnauthPage />} />
