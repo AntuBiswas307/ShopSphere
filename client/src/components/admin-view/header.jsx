@@ -1,6 +1,7 @@
 import { Database, MoveRight } from "lucide-react"; 
 import { Button } from "../ui/button";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { logoutUser } from "@/store/auth-slice";
 import { toast } from "sonner";
 
@@ -9,16 +10,13 @@ function AdminHeader({ setOpen }) {
   const navigate = useNavigate();
 
   function handleLogout() {
-    // dispatch(logoutUser()).then((action) => {
-    //   if (action?.payload?.success) {
-    //     toast.success(action.payload.message);
-    //   } else {
-    //     toast.error("Something went wrong while logging out! Please try again.");
-    //   }
-    // });
-    dispatch(resetTokenAndCredentials()).then(() => {toast.success("Logged out successfully."); navigate("/shopping/home");});
-    sessionStorage.clear();
-    navigate("/auth/login");
+    dispatch(logoutUser()).then((action) => {
+      if (action?.payload?.success) {
+        toast.success(action.payload.message);
+      } else {
+        toast.error("Something went wrong while logging out! Please try again.");
+      }
+    });
   }
 
   return (
