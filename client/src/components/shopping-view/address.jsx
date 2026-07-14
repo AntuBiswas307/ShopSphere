@@ -101,6 +101,9 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
 
   return (
     <Card>
+      <CardHeader>
+        <CardTitle className="font-bold text-xl">Existing Addresses</CardTitle>
+      </CardHeader>
       <div className="mb-5 p-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
         {addressList && addressList.length > 0
           ? addressList.map((singleAddressItem) => (
@@ -116,7 +119,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
           : null}
       </div>
       <CardHeader>
-        <CardTitle>
+        <CardTitle className="font-bold text-xl">
           {currentEditedId !== null ? "Edit Address" : "Add New Address"}
         </CardTitle>
       </CardHeader>
