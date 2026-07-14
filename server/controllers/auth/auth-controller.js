@@ -29,9 +29,28 @@ const registerUser = async (req, res) => {
         });
 
         await newUser.save();
+
+        const token = jwt.sign(
+            {
+                id: newUser._id,
+                role: newUser.role,
+                email: newUser.email,
+                userName: newUser.userName,
+            },
+            "CLIENT_SECRET_KEY",
+            { expiresIn: "60m" }
+        );
+
         res.status(200).json({
             success: true,
             message: "Registration successful.",
+            token,
+            user: {
+                email: newUser.email,
+                role: newUser.role,
+                id: newUser._id,
+                userName: newUser.userName,
+            },
         });
     } catch (e) {
         console.log(e);
