@@ -157,7 +157,9 @@ const authSlice = createSlice({
       .addCase(logoutUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = null;
+        state.token = null;
         state.isAuthenticated = false;
+        sessionStorage.removeItem('token');
       });
   },
 });
