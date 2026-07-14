@@ -87,7 +87,10 @@ function HeaderRightContent({ setOpenMenuSheet }) {
 
   function handleLogout() {
     if (setOpenMenuSheet) setOpenMenuSheet(false);
-    dispatch(logoutUser()).then(() => toast.success("Logged out successfully."));
+    // dispatch(logoutUser()).then(() => toast.success("Logged out successfully."));
+    dispatch(resetTokenAndCredentials()).then(() => {toast.success("Logged out successfully."); navigate("/shopping/home");});
+    sessionStorage.clear();
+    navigate("/auth/login");
   }
 
   function handleAccountClick() {
