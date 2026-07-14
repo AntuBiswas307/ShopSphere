@@ -119,17 +119,17 @@ function ShoppingHome() {
               variant="ghost"
               size="icon"
               onClick={handlePrevSlide}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full cursor-pointer"
+              className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-sm w-9 h-9 lg:w-12 lg:h-12 cursor-pointer active:not-aria-[haspopup]:translate-y-0"
             >
-              <ChevronLeftIcon className="w-6 h-6" />
+              <ChevronLeftIcon className="w-4 h-4 lg:w-5 lg:h-5" />
             </Button>
             <Button
               variant="ghost"
               size="icon"
               onClick={handleNextSlide}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full cursor-pointer"
+              className="absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-sm w-9 h-9 lg:w-12 lg:h-12 cursor-pointer active:not-aria-[haspopup]:translate-y-0"
             >
-              <ChevronRightIcon className="w-6 h-6" />
+              <ChevronRightIcon className="w-4 h-4 lg:w-5 lg:h-5" />
             </Button>
           </>
         )}
