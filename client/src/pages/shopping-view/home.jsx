@@ -1,8 +1,4 @@
 import { Button } from "@/components/ui/button";
-import bannerOne from "../../assets/banner-1.jpg";
-import bannerTwo from "../../assets/banner-2.jpg";
-import bannerThree from "../../assets/banner-3.jpg";
-import bannerFour from "../../assets/banner-4.jpg";
 import {
   Airplay,
   BabyIcon,
@@ -73,6 +69,7 @@ function ShoppingHome() {
   }, [productDetails]);
 
   useEffect(() => {
+    if (!featureImageList || featureImageList.length === 0) return;
     const timer = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % featureImageList.length);
     }, 5000);

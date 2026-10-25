@@ -18,7 +18,7 @@ import {
 } from "@/store/admin/products-slice";
 import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Package2, PlusCircle } from "lucide-react"; // 👇 CHANGED: Imported PlusCircle for the main action button
+import { Package2, PlusCircle, Loader2 } from "lucide-react";
 
 const initialFormData = {
   image: null,
@@ -100,8 +100,6 @@ function AdminProducts() {
     dispatch(fetchAllProducts());
   }, [dispatch]);
 
-  console.log(formData, "productList");
-
   return (
     <Fragment>
       {/* 👇 CHANGED: Wrapped the workspace view inside a structured flexbox layout with proper padding */}
@@ -139,13 +137,26 @@ function AdminProducts() {
 
       <Sheet
         open={openCreateProductsDialog}
-        onOpenChange={() => {
-          setOpenCreateProductsDialog(false);
-          setCurrentEditedId(null);
-          setFormData(initialFormData);
+        onOpenChange={(isOpen) => {
+          setOpenCreateProductsDialog(isOpen);
+          if (!isOpen) {
+            setCurrentEditedId(null);
+            setFormData(initialFormData);
+            setImageFile(null);
+            setUploadedImageUrl("");
+          }
         }}
       >
         <SheetContent side="right" className="overflow-auto sm:max-w-md px-6">
+          {imageLoadingState && (
+            <div className="absolute inset-0 z-50 bg-background/85 backdrop-blur-xs flex flex-col items-center justify-center gap-3">
+              <Loader2 className="w-10 h-10 animate-spin text-primary" />
+              <div className="text-center px-4">
+                <p className="text-base font-semibold text-foreground">Uploading Image...</p>
+                <p className="text-xs text-muted-foreground mt-1">Please wait while the image is uploaded to cloud</p>
+              </div>
+            </div>
+          )}
           <SheetHeader>
             <SheetTitle className="text-2xl tracking-tight flex items-center gap-2 font-bold border-b pb-2">
               <Package2 className="w-6 h-6 text-muted-foreground" />
@@ -170,7 +181,7 @@ function AdminProducts() {
               setFormData={setFormData}
               buttonText={currentEditedId !== null ? "Edit" : "Add"}
               formControls={addProductFormElements}
-              isBtnDisabled={!isFormValid()}
+              isBtnDisabled={!isFormValid() || imageLoadingState}
             />
           </div>
         </SheetContent>

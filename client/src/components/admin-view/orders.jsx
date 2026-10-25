@@ -16,7 +16,6 @@ import {
   getAllOrdersForAdmin,
   getOrderDetailsForAdmin,
   resetOrderDetails,
-  updateOrderStatus,
   deleteOrderForAdmin,
 } from "@/store/admin/order-slice";
 import { Badge } from "../ui/badge";
@@ -29,15 +28,6 @@ function AdminOrdersView() {
 
   function handleFetchOrderDetails(getId) {
     dispatch(getOrderDetailsForAdmin(getId));
-  }
-
-  function handleDeliveryToggle(orderItem, newStatus) {
-    dispatch(
-      updateOrderStatus({ 
-        id: orderItem._id, 
-        orderStatus: newStatus === "delivered" ? "delivered" : "confirmed" 
-      })
-    ).then(() => dispatch(getAllOrdersForAdmin()));
   }
 
   function handleDeleteOrder(id) {
@@ -69,7 +59,6 @@ function AdminOrdersView() {
                 <TableHead>Order ID</TableHead>
                 <TableHead>Order Date</TableHead>
                 <TableHead>Order Status</TableHead>
-                <TableHead>Delivery Status</TableHead>
                 <TableHead>Order Price</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
@@ -79,38 +68,35 @@ function AdminOrdersView() {
                 ? orderList.map((orderItem) => (
                     <TableRow key={orderItem?._id}>
                       <TableCell>{orderItem?._id}</TableCell>
-                      <TableCell>{orderItem?.orderDate.split("T")[0]}</TableCell>
+                      <TableCell>{orderItem?.orderDate ? orderItem.orderDate.split("T")[0] : ""}</TableCell>
                       <TableCell>
-                        <Badge className="bg-black text-white py-1 px-3">Confirmed</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <select
-                          value={orderItem?.orderStatus === "delivered" ? "delivered" : "pending"}
-                          onChange={(e) => handleDeliveryToggle(orderItem, e.target.value)}
-                          className="border rounded px-2 py-1 text-sm cursor-pointer"
+                        <Badge
+                          className={`py-1 px-3 text-white ${
+                            orderItem?.orderStatus === "delivered"
+                              ? "bg-green-500 hover:bg-green-500"
+                              : orderItem?.orderStatus === "rejected"
+                              ? "bg-red-600 hover:bg-red-600"
+                              : orderItem?.orderStatus === "inProcess"
+                              ? "bg-blue-600 hover:bg-blue-600"
+                              : orderItem?.orderStatus === "inShipping"
+                              ? "bg-amber-600 hover:bg-amber-600"
+                              : "bg-black hover:bg-black"
+                          }`}
                         >
-                          <option value="pending">Delivery Pending</option>
-                          <option value="delivered">Delivered</option>
-                        </select>
+                          {orderItem?.orderStatus
+                            ? orderItem.orderStatus.charAt(0).toUpperCase() + orderItem.orderStatus.slice(1)
+                            : "Pending"}
+                        </Badge>
                       </TableCell>
                       <TableCell>${orderItem?.totalAmount}</TableCell>
                       <TableCell>
                         <div className="flex gap-2">
-                          <Dialog
-                            open={openDetailsDialog}
-                            onOpenChange={() => {
-                              setOpenDetailsDialog(false);
-                              dispatch(resetOrderDetails());
-                            }}
+                          <Button
+                            onClick={() => handleFetchOrderDetails(orderItem?._id)}
+                            className="cursor-pointer"
                           >
-                            <Button
-                              onClick={() => handleFetchOrderDetails(orderItem?._id)}
-                              className="cursor-pointer"
-                            >
-                              View Details
-                            </Button>
-                            <AdminOrderDetailsView orderDetails={orderDetails} />
-                          </Dialog>
+                            View Details
+                          </Button>
                           <Button
                             variant="destructive"
                             size="icon"
@@ -128,6 +114,19 @@ function AdminOrdersView() {
           </Table>
         </div>
       </CardContent>
+      <Dialog
+        open={openDetailsDialog}
+        onOpenChange={(isOpen) => {
+          setOpenDetailsDialog(isOpen);
+          if (!isOpen) {
+            setTimeout(() => {
+              dispatch(resetOrderDetails());
+            }, 250);
+          }
+        }}
+      >
+        <AdminOrderDetailsView orderDetails={orderDetails} />
+      </Dialog>
     </Card>
   );
 }

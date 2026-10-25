@@ -78,23 +78,14 @@ function ShoppingOrders() {
                     </TableCell>
                     <TableCell>${orderItem?.totalAmount}</TableCell>
                     <TableCell>
-                      <Dialog
-                        open={openDetailsDialog}
-                        onOpenChange={() => {
-                          setOpenDetailsDialog(false);
-                          dispatch(resetOrderDetails());
-                        }}
+                      <Button
+                        onClick={() =>
+                          handleFetchOrderDetails(orderItem?._id)
+                        }
+                        className="cursor-pointer"
                       >
-                        <Button
-                          onClick={() =>
-                            handleFetchOrderDetails(orderItem?._id)
-                          }
-                          className="cursor-pointer"
-                        >
-                          View Details
-                        </Button>
-                        <ShoppingOrderDetailsView orderDetails={orderDetails} />
-                      </Dialog>
+                        View Details
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))
@@ -102,6 +93,19 @@ function ShoppingOrders() {
           </TableBody>
         </Table>
       </CardContent>
+      <Dialog
+        open={openDetailsDialog}
+        onOpenChange={(isOpen) => {
+          setOpenDetailsDialog(isOpen);
+          if (!isOpen) {
+            setTimeout(() => {
+              dispatch(resetOrderDetails());
+            }, 250);
+          }
+        }}
+      >
+        <ShoppingOrderDetailsView orderDetails={orderDetails} />
+      </Dialog>
     </Card>
   );
 }

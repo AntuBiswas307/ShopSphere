@@ -47,7 +47,7 @@ function AdminOrderDetailsView({ orderDetails }) {
           </div>
           <div className="flex mt-2 items-center justify-between">
             <p className="font-medium">Order Date</p>
-            <Label>{orderDetails?.orderDate.split("T")[0]}</Label>
+            <Label>{orderDetails?.orderDate ? orderDetails.orderDate.split("T")[0] : ""}</Label>
           </div>
           <div className="flex mt-2 items-center justify-between">
             <p className="font-medium">Order Price</p>
@@ -69,7 +69,9 @@ function AdminOrderDetailsView({ orderDetails }) {
                     : "bg-black"
                 }`}
               >
-                {orderDetails?.orderStatus.charAt(0).toUpperCase() + orderDetails?.orderStatus.slice(1)}
+                {orderDetails?.orderStatus
+                  ? orderDetails.orderStatus.charAt(0).toUpperCase() + orderDetails.orderStatus.slice(1)
+                  : ""}
               </Badge>
             </Label>
           </div>
